@@ -13,7 +13,7 @@ namespace RtfWebApp.Controllers
 
     [Route("api/[controller]/")]
     [ApiController]
-    public class SkilController : ApiBaseController<Skill>
+    public class SkilController : ApiBaseController<Skil>
     {
         
         public SkilController(ApplicationDbContext context):

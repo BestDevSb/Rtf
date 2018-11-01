@@ -1,9 +1,9 @@
 ﻿using System;
-
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RtfWebApp.Controllers
-{
+{    
     using Data;
     using RtfWebApp.Models;
     using RtfWebApp.Services;
@@ -40,11 +40,11 @@ namespace RtfWebApp.Controllers
         [HttpPost("api/[controller]/Rate/{employeeId}")]
         public Rating Rate([FromBody]Rating entity, int employeeId)
         {
-            entity.Weight = CalcRate(entity, employeeId);
+            entity.Weight = _context.EmployeeRating.FirstOrDefault(er => er.EmployeeId == employeeId && er.SkillId == entity.SkillId)?.Weight ?? 0.1;
             return base.Add(entity);
         }
 
-        private double CalcRate([FromBody]Rating entity, int employeeId)
+        private double CalcRate(Rating entity, int employeeId)
         {
             //TODO: calc weight by user skils and reliability
             return DefaultWeight;

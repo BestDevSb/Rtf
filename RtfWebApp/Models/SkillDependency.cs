@@ -14,10 +14,10 @@ namespace RtfWebApp.Models
         public int Id { get; set; }
         [DataMember]
         public int SkilAId { get; set; }
-        public Skil SkilA { get; set; }
+        public Skill SkilA { get; set; }
         [DataMember]        
         public int SkilBId { get; set; }
-        public Skil SkilB { get; set; }
+        public Skill SkilB { get; set; }
         [DataMember]
         public double Weight { get; set; }
     }

@@ -3,14 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfWebApp", "RtfWebApp\RtfWebApp.csproj", "{D382B823-194B-45EF-A229-E7697DE37760}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RtfWebApp", "RtfWebApp\RtfWebApp.csproj", "{D382B823-194B-45EF-A229-E7697DE37760}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Ada|Any CPU = Ada|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D382B823-194B-45EF-A229-E7697DE37760}.Ada|Any CPU.ActiveCfg = Ada|Any CPU
+		{D382B823-194B-45EF-A229-E7697DE37760}.Ada|Any CPU.Build.0 = Ada|Any CPU
 		{D382B823-194B-45EF-A229-E7697DE37760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D382B823-194B-45EF-A229-E7697DE37760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D382B823-194B-45EF-A229-E7697DE37760}.Release|Any CPU.ActiveCfg = Release|Any CPU

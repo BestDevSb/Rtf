@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RtfWebApp.Data;
 using RtfWebApp.Models;
 using RtfWebApp.Models.View;
 
@@ -11,6 +12,13 @@ namespace RtfWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext _context = null;
+
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         private static Random _rnd = new Random();
 
         public IActionResult Index()
@@ -20,16 +28,15 @@ namespace RtfWebApp.Controllers
 
         public IActionResult Users()
         {
-            List<UserViewModel> result = new List<UserViewModel>();
-            for (int i = 0; i < 10; i++)
-            {
-                result.Add(new UserViewModel
+            List<UserViewModel> result = _context.Employees.Select(u =>
+                new UserViewModel
                 {
-                    Id = i,
-                    Name = "Test user name " + i,
-                    AvatarId = i
-                });
-            }
+                    Id = u.Id,
+                    Name = u.Name,
+                    AvatarId = Math.Abs(u.Name.GetHashCode()) % 9
+                }
+                ).ToList();
+
             return View(result);
         }
 
@@ -40,23 +47,25 @@ namespace RtfWebApp.Controllers
 
         public IActionResult User(int id)
         {
+            var emp = _context.Employees.FirstOrDefault(ee => ee.Id == id);
+
             UserViewModel result = new UserViewModel
             {
                 Age = 23 + _rnd.Next(40),
-                Name = "Adam Yanukovich " + _rnd.Next(11),
+                Name = emp.Name,
                 Sex = "M",
                 FeedBackQuality = _rnd.Next(100),
-                AvatarId = id,
+                AvatarId = id % 9,
                 Id = id,
-                SkilGroups = CreateSkilGroups(3)
+                SkilGroups = CreateSkilGroups(id)
             };
 
             return View(result);
         }
 
-        private SkilGroup[] CreateSkilGroups(int count)
+        private SkilGroup[] CreateSkilGroups(int employeeId)
         {
-            return Enumerable.Range(0, count).Select(CreateSkilGroup).ToArray();
+            return Enumerable.Range(0, employeeId).Select(CreateSkilGroup).ToArray();
         }
 
         private SkilGroup CreateSkilGroup(int id)

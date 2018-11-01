@@ -57,22 +57,47 @@ namespace RtfWebApp.Controllers
                 FeedBackQuality = _rnd.Next(100),
                 AvatarId = id % 9,
                 Id = id,
-                SkilGroups = CreateSkilGroups(id)
+                SkilGroups = CreateSkillGroups(id)
             };
 
             return View(result);
         }
 
-        private SkilGroup[] CreateSkilGroups(int employeeId)
+        private SkillGroup[] CreateSkillGroups(int employeeId)
         {
             var ratings = _context.Ratings.Where(r => r.EmployeeId == employeeId).ToList();
-            //var skilsId = ratings.Select(r=>r.s)
-            return Enumerable.Range(0, employeeId).Select(CreateSkilGroup).ToArray();
+            var skillsId = ratings.Select(r => r.SkillId).ToArray();
+            var skills = _context.Skills.Where(s => skillsId.Contains(s.Id)).ToList();
+
+            return skills.GroupBy(s => s.Category).Select( c => new SkillGroup
+            {
+                Name = c.Key.ToString(),
+                Skils = CreateSkills(ratings, c.ToList())
+            }).ToArray();
         }
 
-        private SkilGroup CreateSkilGroup(int id)
+        private SkilInfo[] CreateSkills(List<Rating> ratings, List<Skill> skills)
         {
-            return new SkilGroup
+            return skills.Select(s => new SkilInfo
+            {
+                Name = s.Name,
+                Rate = CalcSkillRate(ratings, s)
+            }).ToArray();
+        }
+
+        private double CalcSkillRate(List<Rating> ratings, Skill skill)
+        {
+            var validRatings = ratings.Where(r => r.SkillId == skill.Id).ToList();
+
+            double ratingSum = validRatings.Sum(r => r.Rate * r.Weight);
+            double weightSum = validRatings.Sum(r => r.Weight);
+
+            return ratingSum / weightSum;
+        }
+
+        private SkillGroup CreateSkilGroup(int id)
+        {
+            return new SkillGroup
             {
                 Name = "Skil group " + id,
                 Skils = Enumerable.Range(0, 2 + _rnd.Next(5)).Select(CreateSkil).ToArray()

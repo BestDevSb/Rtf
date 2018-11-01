@@ -18,8 +18,8 @@ namespace RtfWebApp.Models
         public Solution Solution { get; set; }
 
         [DataMember]
-        [ForeignKey(nameof(Skil))]
-        public int SkilId { get; set; }
-        public Skil Skil { get; set; }
+        [ForeignKey(nameof(Skill))]
+        public int SkillId { get; set; }
+        public Skill Skill { get; set; }
     }
 }

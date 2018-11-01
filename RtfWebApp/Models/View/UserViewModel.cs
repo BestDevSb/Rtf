@@ -14,14 +14,14 @@ namespace RtfWebApp.Models.View
         public int Age { get; set; }
         public string Sex { get; set; }
 
-        public SkilGroup[] SkilGroups { get; set; }
+        public SkillGroup[] SkilGroups { get; set; }
         /// <summary>
         /// Качество обратной связи - насколько оценки этого пользователя актуальны
         /// </summary>
         public double FeedBackQuality { get; set; }
     }
 
-    public class SkilGroup
+    public class SkillGroup
     {
         public string Name { get; set; }
 

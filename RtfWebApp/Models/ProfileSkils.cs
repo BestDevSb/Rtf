@@ -17,8 +17,8 @@ namespace RtfWebApp.Models
         public int ProfileId { get; set; }
         public Profile Profile {get;set;}
         [DataMember]
-        [ForeignKey("Skil")]
-        public int SkilId { get; set; }
-        public Skil Skil { get; set; }
+        [ForeignKey("Skill")]
+        public int SkillId { get; set; }
+        public Skill Skill { get; set; }
     }
 }

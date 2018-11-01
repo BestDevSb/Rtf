@@ -5,10 +5,7 @@
 
 <script src="~/js/amcharts/amcharts.js"></script>
 <link href="~/css/user.css" type="text/css" rel="stylesheet" />
-
-
-<h2>@ViewData["Title"]</h2>
-
+<h3>&nbsp;</h3>
 
 <div class="row">
     <div class="col-lg-2">
@@ -18,23 +15,50 @@
     <div class="col-lg-1">
         &nbsp;
     </div>
-    <div class="col-lg-2">
+    <div class="col-lg-4">
         <h3>@Model.Name</h3>
-        
-        <h4>Age: @Model.Age</h4>
-        <h4>Sex: @Model.Sex</h4>
-        <h4 title="Feedback quality">FBW: @Model.FeedBackQuality</h4>
+        <div class="row">
+            <div class="col-lg-2">
+                <h4>Age:</h4>
+            </div>
+            <div class="col-lg-4">
+                <h4>@Model.Age</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h4>Sex:</h4>
+            </div>
+            <div class="col-lg-4">
+                <h4>@Model.Sex</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h4>FBW: </h4>
+            </div>
+            <div class="col-lg-6">
+                <h4>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="@Model.FeedBackQuality"
+                             aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: @Model.FeedBackQuality%;">
+                            @Model.FeedBackQuality%
+                        </div>
+                    </div>
+                </h4>
+            </div>
+        </div>
     </div>
 </div>
 
-<h3>Skils</h3>
+<h3>&nbsp;</h3>
 @foreach(var gr in @Model.SkilGroups)
 {
 <div class="row">
     <div class="col-lg-2">
         <h4>@gr.Name</h4>
     </div>
-    <div class="col-lg-12">
+    <div class="col-lg-10">
         @foreach(var skil in gr.Skils)
         {
         <div class="row">
@@ -42,10 +66,16 @@
                 @skil.Name
             </div>
             <div class="col-lg-3">
-                @skil.Rate
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@skil.Rate"
+                         aria-valuemin="0" aria-valuemax="10" style="min-width: 2em;width: @(skil.Rate*10)%;">
+                        @skil.Rate
+                    </div>
+                </div>
             </div>
         </div>
         }
     </div>
 </div>
+    <hr/>
 }

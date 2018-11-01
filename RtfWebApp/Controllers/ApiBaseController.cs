@@ -39,10 +39,17 @@ namespace RtfWebApp.Controllers
         }
 
         [HttpPost("api/[controller]/range")]
-        public async Task<IEnumerable<TEntity>> AddRange(IEnumerable<TEntity> entities)
+        public virtual async Task<IEnumerable<TEntity>> AddRange(IEnumerable<TEntity> entities)
         {
-            await _context.AddRangeAsync(entities);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.AddRangeAsync(entities);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+
+            }
 
             return entities;
         }

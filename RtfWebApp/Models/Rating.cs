@@ -16,7 +16,7 @@ namespace RtfWebApp.Models
         [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
         [DataMember]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
         public Employee Employee { get; set; }
         [DataMember]
         public double Weight { get; set; }

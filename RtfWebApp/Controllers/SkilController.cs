@@ -12,10 +12,10 @@ namespace RtfWebApp.Controllers
     using RtfWebApp.Models;
 
     [ApiController]
-    public class SkilController : ApiBaseController<Skill>
+    public class SkillController : ApiBaseController<Skill>
     {
         
-        public SkilController(ApplicationDbContext context):
+        public SkillController(ApplicationDbContext context):
             base(context)
         {
         }

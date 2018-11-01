@@ -15,6 +15,7 @@ namespace RtfGenerator.Service
         private const string _csSkillApi = "/api/skil";
         private const string _csProfileApi = "/api/profile";
         private const string _csProfileSkillsApi = "/api/profileskills";
+        private const string _csRateApi = "/api/rate";
 
         private readonly IRestClient _client;
         private readonly IRandomIndexGenerator _generator;
@@ -24,6 +25,13 @@ namespace RtfGenerator.Service
             _generator = generator ?? throw new ArgumentNullException(nameof(generator));
 
             _client = new RestClient(baseUrl);
+        }
+
+        private async Task ExecuteDeleteAsync(string resource)
+        {
+            var request = new RestRequest(resource, Method.DELETE) { RequestFormat = DataFormat.Json };
+
+            await _client.ExecuteTaskAsync(request);
         }
 
         private async Task ExecutePost<T>(string resource, T value)
@@ -65,7 +73,15 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Skill[]>(response.Content).ToList();
         }
 
+        private Task CreateRatingsAsync(IEnumerable<Rating> ratings) => ExecutePost($"{_csRateApi}/ratings", ratings);
+
         private Task CreateProfileSkillsAsync(IEnumerable<ProfileSkills> profileSkills) => ExecutePost($"{_csProfileSkillsApi}/range", profileSkills);
+        private async Task<List<ProfileSkills>> GetProfileSkillsAsync()
+        {
+            IRestResponse response = await ExecuteGetListAsync(_csProfileSkillsApi);
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ProfileSkills[]>(response.Content).ToList();
+        }
 
         private async Task GenerateSkillsAsync()
         {
@@ -173,6 +189,40 @@ namespace RtfGenerator.Service
             Task employeeTask = profileTask.ContinueWith(t => GenerateEmployeesAsync()).Unwrap();
 
             await employeeTask;
+        }
+
+        public async Task GenerateHRRatingsAsync()
+        {
+            await ExecuteDeleteAsync($"{_csRateApi}/clean");
+
+            var employeesTask = GetEmployeesAsync();
+            var profilesTask = GetProfilesAsync();
+            var skillsTask = GetSkillsAsync();
+
+            var employees = (await employeesTask).ToDictionary(k => k.Id);
+            var profiles = (await profilesTask).ToDictionary(k => k.Id);
+            var skills = (await skillsTask).ToDictionary(k => k.Id);
+            var profileSkills = (await GetProfileSkillsAsync()).GroupBy(p => p.ProfileId).ToDictionary(k => k.First().ProfileId, v => v.ToList());
+
+            var ratings = new List<Rating>();
+            foreach(Employee employee in employees.Values)
+            {
+                var profile = profiles[employee.ProfileId];
+
+                foreach(var skill in profileSkills[profile.Id])
+                {
+                    var rating = new Rating
+                    {
+                        EmployeeId = employee.Id,
+                        Rate = _generator.GetNext(1, 10),
+                        SkillId = skill.SkillId,
+                    };
+
+                    ratings.Add(rating);
+                }
+            }
+
+            await CreateRatingsAsync(ratings);
         }
     }
 }

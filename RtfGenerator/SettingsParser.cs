@@ -21,6 +21,9 @@ namespace RtfGenerator
                         break;
                     s.Delay = (int)Math.Ceiling(1.0 / (frequency == 0 ? 1 : frequency) * 1000);
                     break;
+                case "hr":
+                    s.NeedHRRatings = true;
+                    break;
             }
         }
 

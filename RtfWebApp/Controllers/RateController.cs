@@ -7,6 +7,8 @@ namespace RtfWebApp.Controllers
     using Data;
     using RtfWebApp.Models;
     using RtfWebApp.Services;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public class RateController:ApiBaseController<Rating>
     {
@@ -32,6 +34,19 @@ namespace RtfWebApp.Controllers
             return base.Add(entity);
         }
 
+        [HttpPost("api/[controller]/ratings")]
+        public async Task<IEnumerable<Rating>> Ratings([FromBody]IEnumerable<Rating> ratings)
+        {
+            if (ratings == null)
+                return ratings;
+            foreach(Rating r in ratings)
+            {
+                r.Weight = _settingsService.HRDefaultRate;
+            }
+
+            return await base.AddRange(ratings);
+        }
+
         /// <summary>
         /// Рассчет веса оценки на основе данных пользоавтеля
         /// </summary>
@@ -42,6 +57,14 @@ namespace RtfWebApp.Controllers
         {
             entity.Weight = _context.EmployeeRating.FirstOrDefault(er => er.EmployeeId == employeeId && er.SkillId == entity.SkillId)?.Weight ?? 0.1;
             return base.Add(entity);
+        }
+
+        [HttpDelete("api/[controller]/clean")]
+        public async Task<IActionResult> Clean()
+        {
+            _context.Ratings.RemoveRange(_context.Ratings);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         private double CalcRate(Rating entity, int employeeId)

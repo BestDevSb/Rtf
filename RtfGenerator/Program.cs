@@ -28,6 +28,8 @@ namespace RtfGenerator
                 Settings settings = SettingsParser.Parse(args);
                 if (settings.NeedGenerate)
                     await _service.GenerateAsync();
+                if (settings.NeedHRRatings)
+                    await _service.GenerateHRRatingsAsync();
             }
             catch(Exception ex)
             {

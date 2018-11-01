@@ -11,7 +11,6 @@ namespace RtfWebApp.Controllers
     using Data;
     using RtfWebApp.Models;
 
-    [Route("api/[controller]/")]
     [ApiController]
     public class SkilController : ApiBaseController<Skill>
     {

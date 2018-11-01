@@ -1,17 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RtfWebApp.Controllers
 {    
     using Data;
     using RtfWebApp.Models;
+    using RtfWebApp.Services;
 
     public class RateController:ApiBaseController<Rating>
     {
+        private readonly ISettingsService _settingsService;
+
         private const double DefaultWeight = 0.5;
 
-        public RateController(ApplicationDbContext context):base(context)
-        { }
+        public RateController(ApplicationDbContext context, ISettingsService settingsService):base(context)
+        {
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+        }
 
         /// <summary>
         /// Базовый метод для заполнения навыков HR'ом
@@ -22,7 +28,7 @@ namespace RtfWebApp.Controllers
         [HttpPost("api/[controller]/")]
         public override Rating Add([FromBody]Rating entity)
         {
-            entity.Weight = DefaultWeight;
+            entity.Weight = _settingsService.HRDefaultRate;
             return base.Add(entity);
         }
 

@@ -9,6 +9,9 @@ namespace RtfWebApp.Controllers
 {
     using Models;
     using Data;
+    using RtfWebApp.Models;
+    using RtfWebApp.Controllers.Models.Api;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : ApiBaseController<Profile>
@@ -18,6 +21,11 @@ namespace RtfWebApp.Controllers
             base(context)
         {
         }
-         
+
+        [HttpGet("api/[controller]/FindSameProfiles/{employeeId}")]
+        public IEnumerable<ProfileInfo> FindSameProfiles(int employeeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

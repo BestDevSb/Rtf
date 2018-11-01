@@ -8,6 +8,7 @@ namespace RtfWebApp.Controllers
 {
     using Data;
     using Models;
+    using RtfWebApp.Models;
 
     public abstract class ApiBaseController<TEntity>: ControllerBase where TEntity : class, IHaveId
     {

@@ -17,6 +17,22 @@ namespace RtfWebApp.Controllers
             base(context)
         {
         }
-         
+
+        /// <summary>
+        /// Оценка деятельности сотрудника за период
+        /// 0 - 10
+        /// 0 - нет данных
+        /// 1- 6 негатив
+        /// 7 - 8 - норм
+        /// 9 - 10 - позитив
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public int CalcRating(int employeeId, DateTime from, DateTime to)
+        {
+            return 0;
+        }
     }
 }

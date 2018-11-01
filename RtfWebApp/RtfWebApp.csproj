@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>aspnet-RtfWebApp-87371D5E-87D9-4112-8674-02C7171F73A1</UserSecretsId>
+    <Configurations>Debug;Release;Ada</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

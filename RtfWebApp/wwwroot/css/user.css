@@ -8,6 +8,13 @@
     display: block;
     background-repeat: no-repeat;
 }
+.profile-row {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background-size: 100% 100%;
+    margin-bottom: 10px;
+}
 
 .profile-1 { background-image: url('../Images/Faces/Face (1).jpg'); }
 .profile-2 {

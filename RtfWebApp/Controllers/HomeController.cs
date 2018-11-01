@@ -55,7 +55,7 @@ namespace RtfWebApp.Controllers
                 Name = emp.Name,
                 Sex = "M",
                 FeedBackQuality = _rnd.Next(100),
-                AvatarId = id % 9,
+                AvatarId = Math.Abs(emp.Name.GetHashCode()) % 9,
                 Id = id,
                 SkilGroups = CreateSkillGroups(id)
             };

@@ -57,12 +57,12 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Profile[]>(response.Content).ToList();
         }
 
-        private Task CreateSkillsAsync(IEnumerable<Skil> skills) => ExecutePost($"{_csSkillApi}/range", skills);
-        private async Task<List<Skil>> GetSkillsAsync()
+        private Task CreateSkillsAsync(IEnumerable<Skill> skills) => ExecutePost($"{_csSkillApi}/range", skills);
+        private async Task<List<Skill>> GetSkillsAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csSkillApi);
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Skil[]>(response.Content).ToList();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Skill[]>(response.Content).ToList();
         }
 
         private Task CreateProfileSkillsAsync(IEnumerable<ProfileSkills> profileSkills) => ExecutePost($"{_csProfileSkillsApi}/range", profileSkills);
@@ -77,7 +77,7 @@ namespace RtfGenerator.Service
                 [SkillCategory.Soft] = new HashSet<string> { "Эмоциональный интеллект", "Самооценка", "Адаптивность", "Конфликтология", "Клиентоцентричность" }
             };
 
-            List<Skil> newSkills = new List<Skil>();
+            List<Skill> newSkills = new List<Skill>();
 
             foreach(SkillCategory category in skillsDict.Keys)
             {
@@ -85,7 +85,7 @@ namespace RtfGenerator.Service
                     presentSkills[category] = new HashSet<string>();
                 foreach(string skillName in skillsDict[category].Except(presentSkills[category]))
                 {
-                    newSkills.Add(new Skil
+                    newSkills.Add(new Skill
                     {
                         Name = skillName,
                         Category = category
@@ -110,7 +110,7 @@ namespace RtfGenerator.Service
 
             var skills = (await GetSkillsAsync()).ToList();
 
-            IGenerator<Skil> skillGenerator = new Generator<Skil>(_generator);
+            IGenerator<Skill> skillGenerator = new Generator<Skill>(_generator);
             IGenerator<Profile> profileGenerator = new Generator<Profile>(_generator);
             HashSet<int> profileSkills = new HashSet<int>();
 

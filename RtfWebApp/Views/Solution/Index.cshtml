@@ -8,14 +8,22 @@
 
 
 <h2>@ViewData["Title"]</h2>
-
-
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-5" >
         @foreach (var item in Model)
         {
-            <a href="@Url.Action("Item", "Solution", new {id = item.Id})" target="_blank">@item.Name</a>
-            <br />
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-lg-1">
+
+                    <img src="~/images/solution.png" alt="" />
+
+                </div>
+                <div class="col-lg-11">
+
+                    <a href="@Url.Action("Item", "Solution", new {id = item.Id})" target="_blank">@item.Name</a>
+
+                </div>
+            </div>
         }
     </div>
 </div>

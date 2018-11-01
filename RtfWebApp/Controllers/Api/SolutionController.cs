@@ -32,7 +32,12 @@ namespace RtfWebApp.Controllers.Api
         [HttpGet("api/[controller]/getsolutionrecomendedemployees/{solutionId}")]
         public IEnumerable<SolutionRecomendedEmployees> GetRecomendedEmployees(int solutionId)
         {
-            return _context.SolutionRecomendedEmployees.Where(x => x.SolutionId == solutionId).OrderBy(x => x.RateSum);
+            return _context.SolutionRecomendedEmployees
+                .Where(x => x.SolutionId == solutionId)
+                .OrderByDescending(x => x.RateSum)
+                .ThenByDescending(x => x.WeightSum)
+                .Take(10);
+
         }
     }
 }

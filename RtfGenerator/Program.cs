@@ -15,8 +15,6 @@ namespace RtfGenerator
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => true;
 
             MainAsync(args).GetAwaiter().GetResult();
-
-            Console.WriteLine("Thank you");
         }
 
 
@@ -30,8 +28,12 @@ namespace RtfGenerator
                     await _service.GenerateAsync();
                 if (settings.NeedHRRatings)
                     await _service.GenerateHRRatingsAsync();
+                if (settings.NeedSolutions)
+                    await _service.GenerateSolutionsAsync();
+
+                Console.WriteLine("Ready");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await Console.Out.WriteAsync($"Error :: {ex.Message}");
             }

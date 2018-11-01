@@ -58,7 +58,8 @@ namespace RtfWebApp.Controllers.Api
                 .OrderByDescending(x => x.IntersectCount)
                 .ThenByDescending(x => x.TotalRate)
                 .ThenByDescending(x => x.TotalWeight)
-                .Take(10);
+                .Take(10)
+                .ToList();
         }
     }
 }

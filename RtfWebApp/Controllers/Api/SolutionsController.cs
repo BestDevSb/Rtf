@@ -11,9 +11,9 @@ namespace RtfWebApp.Controllers.Api
     using RtfWebApp.Models;
     using RtfWebApp.Controllers.Models.Api;
 
-    public class SolutionController : ApiBaseController<Solution>
+    public class SolutionsController : ApiBaseController<Solution>
     {
-        public SolutionController(ApplicationDbContext context) : base(context)
+        public SolutionsController(ApplicationDbContext context) : base(context)
         {
         }
 
@@ -36,7 +36,8 @@ namespace RtfWebApp.Controllers.Api
                 .Where(x => x.SolutionId == solutionId)
                 .OrderByDescending(x => x.RateSum)
                 .ThenByDescending(x => x.WeightSum)
-                .Take(10);
+                .Take(10)
+                .ToList();
 
         }
     }

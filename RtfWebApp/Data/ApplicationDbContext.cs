@@ -7,16 +7,19 @@ using Microsoft.EntityFrameworkCore;
 namespace RtfWebApp.Data
 {
     using Models;
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext:  IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
-
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<SkillDependency>().HasOne(x => x.SkilA).WithMany(x => x.Dependencies).HasForeignKey(x => x.SkilAId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SkillDependency>().HasOne(x => x.SkilB).WithMany(x => x.Dependendenties).HasForeignKey(x => x.SkilBId).OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
             
         }

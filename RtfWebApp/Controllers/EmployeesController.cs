@@ -10,9 +10,8 @@ namespace RtfWebApp.Controllers
     using Models;
     using Data;
     using RtfWebApp.Models;
-    using RtfWebApp.Controllers.Models.Api;
 
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [ApiController]
     public class EmployeesController : ApiBaseController<Employee>
     {

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RtfWebApp.Models
 {
     [DataContract]
-    public class ProfileSkils : IHaveId
+    public class ProfileSkills : IHaveId
     {
         [DataMember]
         public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace RtfWebApp.Models
         [DataMember]
         [ForeignKey("Skil")]
         public int SkilId { get; set; }
-        public Skil Skil { get; set; }
+        public Skill Skil { get; set; }
     }
 }

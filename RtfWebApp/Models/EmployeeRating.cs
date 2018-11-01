@@ -13,6 +13,7 @@ namespace RtfWebApp.Models
         public int TotalRate { get; set; }
         public int RateCount { get; set; }
         public string EmployeeName { get; set; }
+        public int SkillId { get; set; }
         public string SkillTitle { get; set; }
     }
 }

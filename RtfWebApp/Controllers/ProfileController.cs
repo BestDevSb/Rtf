@@ -12,7 +12,6 @@ namespace RtfWebApp.Controllers
     using RtfWebApp.Models;
     using RtfWebApp.Controllers.Models.Api;
 
-    [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : ApiBaseController<Profile>
     {

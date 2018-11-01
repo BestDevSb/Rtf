@@ -7,5 +7,6 @@ namespace RtfGenerator.Service
     internal interface IService
     {
         Task GenerateAsync();
+        Task GenerateHRRatingsAsync();
     }
 }

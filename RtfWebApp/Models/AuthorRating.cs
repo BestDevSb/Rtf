@@ -8,23 +8,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RtfWebApp.Models
 {
     [DataContract]
-    public class Rating: IHaveId
+    public class AuthorRating: IHaveId
     {
         [DataMember]
         public int Id { get; set; }
+
+        /// <summary>
+        /// Кто ставит оценку
+        /// </summary>
         [DataMember]
         [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
+
         [DataMember]
-        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
-        public Employee Employee { get; set; }
+        public DateTimeOffset Date { get; set; }
+
         [DataMember]
         public double Weight { get; set; }
+
         [DataMember]
         public int Rate { get; set; }
+
         [DataMember]
         [ForeignKey(nameof(Skill))]
         public int SkillId { get; set; }
+
         public Skill Skill { get; set; }
+        public Employee Employee { get; set; }
     }
 }

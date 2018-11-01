@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="NewFolder\**" />
-    <Content Remove="NewFolder\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="NewFolder\**" />
+    <Compile Remove="Migrations\20181101164914_AuthorRating.cs" />
+    <Compile Remove="Migrations\20181101164914_AuthorRating.Designer.cs" />
+    <Compile Remove="Migrations\20181101165421_AuthorRating.cs" />
+    <Compile Remove="Migrations\20181101165421_AuthorRating.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,6 @@ using RtfWebApp.Models;
 
 namespace RtfWebApp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ProfileSkillsController : ApiBaseController<ProfileSkills>
     {

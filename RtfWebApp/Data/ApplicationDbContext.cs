@@ -26,11 +26,13 @@ namespace RtfWebApp.Data
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Skill> Skills { get; set; }
         public DbSet<Solution> Solutions { get; set; }
+        public DbSet<Skill> Skills { get; set; }
+        public DbSet<SolutionSkils> SolutionsSkills { get; set; }
         public DbSet<SkillDependency> SkillDependencies { get; set; }
         public DbSet<Achivment> Achivments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<AuthorRating> AuthorRatings { get; set; }
         public DbSet<ProfileSkills> ProfileSkils {get;set;}
         public DbSet<EmployeeAchivments> UserAchivments { get; set; }
         public DbSet<EmployeeSolutions>  EmployeeSolutions { get; set; }

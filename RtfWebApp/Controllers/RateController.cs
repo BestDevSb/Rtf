@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace RtfWebApp.Controllers
 {
-    using Models;
     using Data;
     using RtfWebApp.Models;
     using RtfWebApp.Services;
 
-    [Route("api/[controller]")]
     public class RateController:ApiBaseController<Rating>
     {
         private readonly ISettingsService _settingsService;

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RtfGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-g"
+    }
+  }
+}

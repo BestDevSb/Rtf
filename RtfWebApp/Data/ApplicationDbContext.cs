@@ -19,7 +19,9 @@ namespace RtfWebApp.Data
         {
             builder.Entity<SkillDependency>().HasOne(x => x.SkillA).WithMany(x => x.Dependencies).HasForeignKey(x => x.SkillAId).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<SkillDependency>().HasOne(x => x.SkillB).WithMany(x => x.Dependendenties).HasForeignKey(x => x.SkillBId).OnDelete(DeleteBehavior.Restrict);
+
             builder.Query<EmployeeRating>().ToView("V_EMPLOYEESRATES");
+            builder.Query<SolutionRecomendedEmployees>().ToView("V_SOLUTION_EMPLOYEE");
             base.OnModelCreating(builder);
             
         }
@@ -36,6 +38,8 @@ namespace RtfWebApp.Data
         public DbSet<ProfileSkills> ProfileSkils {get;set;}
         public DbSet<EmployeeAchivments> UserAchivments { get; set; }
         public DbSet<EmployeeSolutions>  EmployeeSolutions { get; set; }
+
         public DbQuery<EmployeeRating> EmployeeRating { get; set; }
+        public DbQuery<SolutionRecomendedEmployees> SolutionRecomendedEmployees { get; set; }
     }
 }

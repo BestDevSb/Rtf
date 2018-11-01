@@ -49,5 +49,16 @@ namespace RtfWebApp.Controllers.Api
         {
             return _context.EmployeeRating.ToList();
         }
+
+        [HttpGet("api/[controller]/getrecomendedemployees/{employeeId}")]
+        public IEnumerable<RecomendedEmployees> GetRecomendedEmployees(int employeeId)
+        {
+            return _context.RecomendedEmployees
+                .Where(x => x.EmployeeId == employeeId)
+                .OrderByDescending(x => x.IntersectCount)
+                .ThenByDescending(x => x.TotalRate)
+                .ThenByDescending(x => x.TotalWeight)
+                .Take(10);
+        }
     }
 }

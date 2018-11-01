@@ -47,7 +47,7 @@ namespace RtfWebApp.Controllers
                 FeedBackQuality = _rnd.Next(100),
                 AvatarId = id % 9,
                 Id = id,
-                SkilGroups = CreateSkillGroups(id)
+                
             };
 
             return View(result);

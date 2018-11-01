@@ -12,10 +12,15 @@ namespace RtfGenerator.Service
     internal class Service : IService
     {
         private const string _csEmployeeApi = "/api/employees/";
-        private const string _csSkillApi = "/api/skil";
+        private const string _csSkillApi = "/api/skill";
         private const string _csProfileApi = "/api/profile";
         private const string _csProfileSkillsApi = "/api/profileskills";
         private const string _csRateApi = "/api/rate";
+        private const string _csSolutionsApi = "/api/solutions";
+        private const string _csSolutionsSkillsApi = "/api/solutionsskills";
+
+        private static Func<string, string> _cleanApi = api => $"{api}/clean";
+        private static Func<string, string> _rangeApi = api => $"{api}/range";
 
         private readonly IRestClient _client;
         private readonly IRandomIndexGenerator _generator;
@@ -34,7 +39,7 @@ namespace RtfGenerator.Service
             await _client.ExecuteTaskAsync(request);
         }
 
-        private async Task ExecutePost<T>(string resource, T value)
+        private async Task ExecutePostAsync<T>(string resource, T value)
         {
             var request = new RestRequest(resource, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(value);
@@ -49,7 +54,7 @@ namespace RtfGenerator.Service
             return await _client.ExecuteGetTaskAsync(request);
         }
 
-        private Task CreateEmployeesAsync(IEnumerable<Employee> employees) => ExecutePost($"{_csEmployeeApi}/range", employees);
+        private Task CreateEmployeesAsync(IEnumerable<Employee> employees) => ExecutePostAsync($"{_csEmployeeApi}/range", employees);
         private async Task<List<Employee>> GetEmployeesAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csEmployeeApi);
@@ -57,7 +62,7 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Employee[]>(response.Content).ToList();
         }
 
-        private Task CreateProfilesAsync(IEnumerable<Profile> profiles) => ExecutePost($"{_csProfileApi}/range", profiles);
+        private Task CreateProfilesAsync(IEnumerable<Profile> profiles) => ExecutePostAsync($"{_csProfileApi}/range", profiles);
         private async Task<List<Profile>> GetProfilesAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csProfileApi);
@@ -65,17 +70,25 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Profile[]>(response.Content).ToList();
         }
 
-        private Task CreateSkillsAsync(IEnumerable<Skill> skills) => ExecutePost($"{_csSkillApi}/range", skills);
+        private Task CreateSkillsAsync(IEnumerable<Skill> skills) => ExecutePostAsync($"{_csSkillApi}/range", skills);
         private async Task<List<Skill>> GetSkillsAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csSkillApi);
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Skill[]>(response.Content).ToList();
+            return response.StatusCode == System.Net.HttpStatusCode.NotFound
+                ? new List<Skill>()
+                : Newtonsoft.Json.JsonConvert.DeserializeObject<Skill[]>(response.Content).ToList();
         }
 
-        private Task CreateRatingsAsync(IEnumerable<Rating> ratings) => ExecutePost($"{_csRateApi}/ratings", ratings);
+        private Task CreateSolutionsAsync(IEnumerable<Solution> solutions) => ExecutePostAsync($"{_csSolutionsApi}/range", solutions);
+        private async Task<List<Solution>> GetSolutionsAsync()
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Solution[]>((await ExecuteGetListAsync(_csSolutionsApi)).Content).ToList();
+        }
 
-        private Task CreateProfileSkillsAsync(IEnumerable<ProfileSkills> profileSkills) => ExecutePost($"{_csProfileSkillsApi}/range", profileSkills);
+        private Task CreateRatingsAsync(IEnumerable<Rating> ratings) => ExecutePostAsync($"{_csRateApi}/ratings", ratings);
+
+        private Task CreateProfileSkillsAsync(IEnumerable<ProfileSkills> profileSkills) => ExecutePostAsync($"{_csProfileSkillsApi}/range", profileSkills);
         private async Task<List<ProfileSkills>> GetProfileSkillsAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csProfileSkillsApi);
@@ -114,6 +127,9 @@ namespace RtfGenerator.Service
 
         private async Task GenerateProfilesAsync()
         {
+            await ExecuteDeleteAsync(_cleanApi(_csProfileSkillsApi));
+            await ExecuteDeleteAsync(_cleanApi(_csProfileApi));
+
             var presentedProfiles = (await GetProfilesAsync()).Select(i => i.Name).ToHashSet();
             var profiles = Enumerable.Range(0, 30).Select(i => $"Профиль {i}").ToHashSet();
 
@@ -223,6 +239,37 @@ namespace RtfGenerator.Service
             }
 
             await CreateRatingsAsync(ratings);
+        }
+
+        public async Task GenerateSolutionsAsync()
+        {
+            await ExecuteDeleteAsync(_cleanApi(_csSolutionsSkillsApi));
+            await ExecuteDeleteAsync(_cleanApi(_csSolutionsApi));
+
+
+            var skillsTask = GetSkillsAsync();
+            var solutions = Enumerable.Range(0, 20).Select(s => new Solution { Title = $"Решение {s}" });
+            await CreateSolutionsAsync(solutions);
+
+            var solutionSkills = new List<SolutionSkils>();
+            var skills = await skillsTask;
+            IGenerator<Skill> skillGenerator = new Generator<Skill>(_generator);
+
+            foreach(Solution solution in await GetSolutionsAsync())
+            {
+                for(int index = 0; index < _generator.GetNext(0, 5); index++)
+                {
+                    var solSkill = new SolutionSkils
+                    {
+                        SolutionId = solution.Id,
+                        SkillId = skillGenerator.GetNext(skills).Id
+                    };
+
+                    solutionSkills.Add(solSkill);
+                }
+            }
+
+            await ExecutePostAsync(_rangeApi(_csSolutionsSkillsApi), solutionSkills);
         }
     }
 }

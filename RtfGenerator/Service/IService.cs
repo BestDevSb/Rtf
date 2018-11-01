@@ -8,5 +8,6 @@ namespace RtfGenerator.Service
     {
         Task GenerateAsync();
         Task GenerateHRRatingsAsync();
+        Task GenerateSolutionsAsync();
     }
 }

@@ -39,7 +39,7 @@ namespace RtfWebApp.Controllers.Api
         }
 
         [HttpPost("api/[controller]/range")]
-        public virtual async Task<IEnumerable<TEntity>> AddRange(IEnumerable<TEntity> entities)
+        public virtual async Task<IEnumerable<TEntity>> AddRange([FromBody]IEnumerable<TEntity> entities)
         {
             try
             {
@@ -61,5 +61,14 @@ namespace RtfWebApp.Controllers.Api
             _context.SaveChanges();
             return entity;
         }
+
+        [HttpDelete("api/[controller]/clean")]
+        public async Task<IActionResult> Clean()
+        {
+            _context.RemoveRange(_context.Set<TEntity>().ToList());
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
     }
 }

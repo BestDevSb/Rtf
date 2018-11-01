@@ -59,14 +59,6 @@ namespace RtfWebApp.Controllers.Api
             return base.Add(entity);
         }
 
-        [HttpDelete("api/[controller]/clean")]
-        public async Task<IActionResult> Clean()
-        {
-            _context.Ratings.RemoveRange(_context.Ratings);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
-
         private double CalcRate(Rating entity, int employeeId)
         {
             //TODO: calc weight by user skils and reliability

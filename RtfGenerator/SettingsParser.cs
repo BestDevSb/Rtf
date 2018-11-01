@@ -24,6 +24,9 @@ namespace RtfGenerator
                 case "hr":
                     s.NeedHRRatings = true;
                     break;
+                case "sol":
+                    s.NeedSolutions = true;
+                    break;
             }
         }
 

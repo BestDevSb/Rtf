@@ -65,6 +65,8 @@ namespace RtfWebApp.Controllers
 
         private SkilGroup[] CreateSkilGroups(int employeeId)
         {
+            var ratings = _context.Ratings.Where(r => r.EmployeeId == employeeId).ToList();
+            //var skilsId = ratings.Select(r=>r.s)
             return Enumerable.Range(0, employeeId).Select(CreateSkilGroup).ToArray();
         }
 

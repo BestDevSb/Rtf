@@ -16,6 +16,6 @@ namespace RtfWebApp.Models
         [DataMember]
         [ForeignKey(nameof(Skil))]
         public int SkilId { get; set; }
-        public Skill Skil { get; set; }
+        public Skil Skil { get; set; }
     }
 }

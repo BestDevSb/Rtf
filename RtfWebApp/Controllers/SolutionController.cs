@@ -63,7 +63,13 @@ namespace RtfWebApp.Controllers
 
         public ActionResult FindEmployees(int id)
         {
-            var reqEmp = _context.SolutionRecomendedEmployees.Where(emp => emp.SolutionId == id).ToList();
+            var reqEmp = _context.SolutionRecomendedEmployees
+                .Where(x => x.SolutionId == id)
+                .OrderByDescending(x => x.RateSum)
+                .ThenByDescending(x => x.WeightSum)
+                .Take(10)
+                .ToList();
+
             var empIds = reqEmp.Select(s => s.EmployeeId).ToList();
             var employees = _context.Employees.Where(em => empIds.Contains(em.Id))
                 .Select(HomeController.ToUserViewModel).ToList();

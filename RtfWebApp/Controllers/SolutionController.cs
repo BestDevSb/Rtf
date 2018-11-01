@@ -33,22 +33,42 @@ namespace RtfWebApp.Controllers
 
             return View(result);
         }
-        
+
         public IActionResult Item(int id)
         {
-            var emp = _context.Employees.FirstOrDefault(ee => ee.Id == id);
+            var solution = _context.Solutions.FirstOrDefault(ee => ee.Id == id);
+            var solSkills = _context.SolutionsSkills.Where(s => s.SolutionId == id);
+            var skillsId = solSkills.Select(s => s.SkillId).ToList();
 
-            UserViewModel result = new UserViewModel
+            var skills = _context.Skills.Where(s => skillsId.Contains(s.Id)).ToArray();
+            var solEmp = _context.EmployeeSolutions.Where(ee => ee.SolutionId == id);
+            var solEmpId = solEmp.Select(s => s.EmployeeId).ToList();
+
+            var employees = _context.Employees.Where(em => solEmpId.Contains(em.Id)).ToArray();
+
+            SolutionViewModel result = new SolutionViewModel
             {
-                Age = 23 + _rnd.Next(40),
-                Name = emp.Name,
-                Sex = "M",
-                FeedBackQuality = _rnd.Next(100),
-                AvatarId = id % 9,
-                Id = id
+                Name = solution.Title,
+                Employees = employees,
+                Id = id,
+                Resolution = Models.Api.SolutionResolution.Unset,
+                Skills = skills.Select(s => new SkilInfo
+                {
+                    Name = s.Name
+                }).ToArray()
             };
 
             return View(result);
+        }
+
+        public ActionResult FindEmployees(int id)
+        {
+            var reqEmp = _context.SolutionRecomendedEmployees.Where(emp => emp.SolutionId == id).ToList();
+            var empIds = reqEmp.Select(s => s.EmployeeId).ToList();
+            var employees = _context.Employees.Where(em => empIds.Contains(em.Id))
+                .Select(HomeController.ToUserViewModel).ToList();
+
+            return View("~/Views/Home/Users.cshtml", employees);
         }
     }
 }

@@ -1,0 +1,8 @@
+﻿@model List<RtfWebApp.Models.View.UserViewModel>
+
+@foreach (var user in Model)
+{
+    <img src="#" alt="" class="profile profile-row profile-@user.AvatarId" />
+    <a href="@Url.Action("User", "Home", new {id = user.Id})" target="_blank">@user.Name</a>
+    <br />
+}

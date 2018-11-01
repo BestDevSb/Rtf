@@ -19,6 +19,9 @@ namespace RtfWebApp.Models.View
         /// Качество обратной связи - насколько оценки этого пользователя актуальны
         /// </summary>
         public double FeedBackQuality { get; set; }
+
+        public List<UserViewModel> SimilarUsers { get; set; }
+        public SkillGroup[] PreviousSkillGroups { get; set; }
     }
 
     public class SkillGroup

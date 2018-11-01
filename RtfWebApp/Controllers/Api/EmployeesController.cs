@@ -10,14 +10,17 @@ namespace RtfWebApp.Controllers.Api
     using Models;
     using Data;
     using RtfWebApp.Models;
+    using RtfWebApp.Services;
 
     [ApiController]
     public class EmployeesController : ApiBaseController<Employee>
     {
+        private readonly IEmployeesService _service;
         
-        public EmployeesController(ApplicationDbContext context):
+        public EmployeesController(ApplicationDbContext context, IEmployeesService service):
             base(context)
         {
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         /// <summary>
@@ -51,15 +54,9 @@ namespace RtfWebApp.Controllers.Api
         }
 
         [HttpGet("api/[controller]/getrecomendedemployees/{employeeId}")]
-        public IEnumerable<RecomendedEmployees> GetRecomendedEmployees(int employeeId)
+        public async Task<IEnumerable<RecomendedEmployees>> GetRecomendedEmployees(int employeeId)
         {
-            return _context.RecomendedEmployees
-                .Where(x => x.EmployeeId == employeeId)
-                .OrderByDescending(x => x.IntersectCount)
-                .ThenByDescending(x => x.TotalRate)
-                .ThenByDescending(x => x.TotalWeight)
-                .Take(10)
-                .ToList();
+            return await _service.GetRecommendedEmployeesAsync(employeeId);
         }
     }
 }

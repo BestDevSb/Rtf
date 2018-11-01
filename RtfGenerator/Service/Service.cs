@@ -18,6 +18,7 @@ namespace RtfGenerator.Service
         private const string _csRateApi = "/api/rate";
         private const string _csSolutionsApi = "/api/solutions";
         private const string _csSolutionsSkillsApi = "/api/solutionsskills";
+        private const string _csRateEmployee = "/api/rate/rate/{0}";
 
         private static Func<string, string> _cleanApi = api => $"{api}/clean";
         private static Func<string, string> _rangeApi = api => $"{api}/range";
@@ -232,6 +233,7 @@ namespace RtfGenerator.Service
                         EmployeeId = employee.Id,
                         Rate = _generator.GetNext(1, 10),
                         SkillId = skill.SkillId,
+                        Date = DateTimeOffset.Now.AddDays(-7)
                     };
 
                     ratings.Add(rating);
@@ -244,6 +246,7 @@ namespace RtfGenerator.Service
         public async Task GenerateSolutionsAsync()
         {
             await ExecuteDeleteAsync(_cleanApi(_csSolutionsSkillsApi));
+
             await ExecuteDeleteAsync(_cleanApi(_csSolutionsApi));
 
 
@@ -270,6 +273,61 @@ namespace RtfGenerator.Service
             }
 
             await ExecutePostAsync(_rangeApi(_csSolutionsSkillsApi), solutionSkills);
+        }
+
+        public async Task MakeRatingsAsync()
+        {
+            var employeesTask = GetEmployeesAsync();
+            var skillsTask = GetSkillsAsync();
+
+            var employees = await employeesTask;
+            var skills = await skillsTask;
+
+            var procesedEmployees = new HashSet<Employee>();
+            IGenerator<Employee> employeeGenerator = new Generator<Employee>(_generator);
+            IGenerator<Skill> skillGenerator = new Generator<Skill>(_generator);
+
+            Employee findEmployee()
+            {
+                Employee result;
+
+                if (procesedEmployees.Count == employees.Count)
+                    return null;
+
+                do
+                {
+                    result = employeeGenerator.GetNext(employees);
+                } while (procesedEmployees.Contains(result));
+
+                procesedEmployees.Add(result);
+                return result;
+            };
+
+            for(int day = 6; day >= 0; day--)
+            {
+                foreach (Employee employee in employees)
+                {
+                    Employee who = findEmployee();
+                    if (who == null)
+                        break;
+                    Employee whom = findEmployee();
+                    if (whom == null)
+                        break;
+
+                    for (int skillIndex = 0; skillIndex < _generator.GetNext(0, skills.Count); skillIndex++)
+                    {
+                        await ExecutePostAsync<Rating>(string.Format(_csRateEmployee, who.Id), new Rating
+                        {
+                            Rate = _generator.GetNext(1, 10),
+                            SkillId = skillGenerator.GetNext(skills).Id,
+                            EmployeeId = whom.Id,
+                            Date = DateTimeOffset.Now.AddDays(-day)
+                        });
+                    }
+                }
+
+                procesedEmployees.Clear();
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace RtfWebApp.Controllers
 
         public IActionResult Index()
         {
-            List<SolutionViewModel> result = _context.Solution.Select(u =>
+            List<SolutionViewModel> result = _context.Solutions.Select(u =>
                 new SolutionViewModel
                 {
                     Id = u.Id,

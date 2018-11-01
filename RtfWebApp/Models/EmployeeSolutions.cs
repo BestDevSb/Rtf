@@ -21,5 +21,8 @@ namespace RtfWebApp.Models
         [ForeignKey(nameof(Solution))]
         public int SolutionId { get; set; }
         public Solution Solution { get; set; }
+
+        [DataMember]
+        public int Rate { get; set; }
     }
 }

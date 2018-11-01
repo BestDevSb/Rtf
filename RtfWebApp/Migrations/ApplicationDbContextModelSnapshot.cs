@@ -270,6 +270,8 @@ namespace RtfWebApp.Migrations
 
                     b.Property<int>("EmployeeId");
 
+                    b.Property<int>("Rate");
+
                     b.Property<int>("SolutionId");
 
                     b.HasKey("Id");
@@ -384,7 +386,7 @@ namespace RtfWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Solution");
+                    b.ToTable("Solutions");
                 });
 
             modelBuilder.Entity("RtfWebApp.Models.SolutionSkils", b =>
@@ -466,7 +468,7 @@ namespace RtfWebApp.Migrations
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("RtfWebApp.Models.Skil", "Skill")
+                    b.HasOne("RtfWebApp.Models.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade);

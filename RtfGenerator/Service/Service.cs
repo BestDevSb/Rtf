@@ -260,7 +260,7 @@ namespace RtfGenerator.Service
 
             foreach(Solution solution in await GetSolutionsAsync())
             {
-                for(int index = 0; index < _generator.GetNext(0, 5); index++)
+                for(int index = 0; index < _generator.GetNext(5, Math.Max(15, skills.Count)); index++)
                 {
                     var solSkill = new SolutionSkils
                     {
@@ -313,6 +313,8 @@ namespace RtfGenerator.Service
                     Employee whom = findEmployee();
                     if (whom == null)
                         break;
+
+                    procesedEmployees.Remove(whom);
 
                     for (int skillIndex = 0; skillIndex < _generator.GetNext(0, skills.Count); skillIndex++)
                     {

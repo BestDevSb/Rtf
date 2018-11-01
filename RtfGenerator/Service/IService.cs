@@ -7,7 +7,5 @@ namespace RtfGenerator.Service
     internal interface IService
     {
         Task GenerateAsync();
-        Task<IEnumerable<Employee>> GetEmployeesAsync();
-        Task<IEnumerable<Skill>> GetSkillsAsync();
     }
 }

@@ -1,4 +1,5 @@
-﻿using RtfGenerator.Service;
+﻿using RtfGenerator.Generator;
+using RtfGenerator.Service;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace RtfGenerator
 {
     class Program
     {
-        private static readonly IService _service = new Service.Service("http://localhost:51341");
+        private static readonly IService _service = new Service.Service("http://localhost:51341", new RandomIndexGenerator());
 
         static void Main(string[] args)
         {

@@ -30,7 +30,7 @@ namespace RtfWebApp.Controllers
             return _context.Set<TEntity>().ToList();
         }
 
-        [HttpPost("api/[controller]/")]
+        [HttpPost]
         public virtual TEntity Add(TEntity entity)
         {
             _context.Add(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;

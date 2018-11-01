@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RtfWebApp.Models
 {
     [DataContract]
-    public class ProfileSkils : IHaveId
+    public class ProfileSkills : IHaveId
     {
         [DataMember]
         public int Id { get; set; }

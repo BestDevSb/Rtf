@@ -31,6 +31,8 @@ namespace RtfGenerator
                 if (settings.NeedSolutions)
                     await _service.GenerateSolutionsAsync();
 
+                await _service.MakeRatingsAsync();
+
                 Console.WriteLine("Ready");
             }
             catch (Exception ex)

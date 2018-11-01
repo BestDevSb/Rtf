@@ -21,6 +21,7 @@ namespace RtfWebApp.Models.View
         public double FeedBackQuality { get; set; }
 
         public List<UserViewModel> SimilarUsers { get; set; }
+        public SkillGroup[] PreviousSkillGroups { get; set; }
     }
 
     public class SkillGroup

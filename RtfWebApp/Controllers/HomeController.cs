@@ -62,7 +62,8 @@ namespace RtfWebApp.Controllers
                 FeedBackQuality = _rnd.Next(100),
                 AvatarId = Math.Abs(emp.Name.GetHashCode()) % 9,
                 Id = id,
-                SkilGroups = CreateSkillGroups(id)
+                SkilGroups = CreateSkillGroups(id),
+                PreviousSkillGroups = CreateSkillGroups(id, previousPeriod: true)
             };
 
             var similarUsers = await _service.GetRecommendedEmployeesAsync(id);
@@ -75,24 +76,31 @@ namespace RtfWebApp.Controllers
                     Sex = "M",
                     FeedBackQuality = _rnd.Next(100),
                     AvatarId = Math.Abs(e.Name.GetHashCode()) % 9,
-                    Id = e.Id,
-                    SkilGroups = CreateSkillGroups(e.Id)
+                    Id = e.Id
                 };
             }).ToList();
 
             return View(result);
         }
 
-        private SkillGroup[] CreateSkillGroups(int employeeId)
+        private SkillGroup[] CreateSkillGroups(int employeeId, bool previousPeriod = false)
         {
             var ratings = _context.Ratings.Where(r => r.EmployeeId == employeeId).ToList();
+            var thresholdDate = previousPeriod ? ratings.Min(r => r.Date) : ratings.Max(r => r.Date.Date);
             var skillsId = ratings.Select(r => r.SkillId).ToArray();
             var skills = _context.Skills.Where(s => skillsId.Contains(s.Id)).ToList();
+
+            bool DateFilter(Rating rating)
+            {
+                return previousPeriod
+                    ? thresholdDate.AddDays(1) >= rating.Date.Date
+                    : rating.Date >= thresholdDate;
+            }
 
             return skills.GroupBy(s => s.Category).Select( c => new SkillGroup
             {
                 Name = c.Key.ToString(),
-                Skils = CreateSkills(ratings, c.ToList())
+                Skils = CreateSkills(ratings.Where(DateFilter).ToList(), c.ToList())
             }).ToArray();
         }
 
@@ -112,7 +120,7 @@ namespace RtfWebApp.Controllers
             double ratingSum = validRatings.Sum(r => r.Rate * r.Weight);
             double weightSum = validRatings.Sum(r => r.Weight);
 
-            return ratingSum / weightSum;
+            return (weightSum - 0) <= double.Epsilon ? 0 : ratingSum / weightSum;
         }
 
         private SkillGroup CreateSkilGroup(int id)

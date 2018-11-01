@@ -55,7 +55,7 @@ namespace RtfWebApp.Controllers.Api
         [HttpPost("api/[controller]/Rate/{employeeId}")]
         public Rating Rate([FromBody]Rating entity, int employeeId)
         {
-            entity.Weight = _context.EmployeeRating.FirstOrDefault(er => er.EmployeeId == employeeId && er.SkillId == entity.SkillId)?.Weight ?? 0.1;
+            entity.Weight = _context.EmployeeRating.FirstOrDefault(er => er.EmployeeId == employeeId && er.SkillId == entity.SkillId)?.Weight ?? 0.5;
             return base.Add(entity);
         }
 

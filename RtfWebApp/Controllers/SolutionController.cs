@@ -23,12 +23,11 @@ namespace RtfWebApp.Controllers
 
         public IActionResult Index()
         {
-            List<UserViewModel> result = _context.Employees.Select(u =>
-                new UserViewModel
+            List<SolutionViewModel> result = _context.Solutions.Select(u =>
+                new SolutionViewModel
                 {
                     Id = u.Id,
-                    Name = u.Name,
-                    AvatarId = Math.Abs(u.Name.GetHashCode()) % 9
+                    Name = u.Title
                 }
                 ).ToList();
 
@@ -46,8 +45,7 @@ namespace RtfWebApp.Controllers
                 Sex = "M",
                 FeedBackQuality = _rnd.Next(100),
                 AvatarId = id % 9,
-                Id = id,
-                SkilGroups = CreateSkillGroups(id)
+                Id = id
             };
 
             return View(result);

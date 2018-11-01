@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using RtfWebApp.Data;
 using RtfWebApp.Models;
 using RtfWebApp.Models.View;
+using RtfWebApp.Services;
 
 namespace RtfWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IEmployeesService _service;
         private ApplicationDbContext _context = null;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, IEmployeesService service)
         {
             _context = context;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         private static Random _rnd = new Random();
@@ -45,7 +48,7 @@ namespace RtfWebApp.Controllers
             return View();
         }
 
-        public IActionResult User(int id)
+        public async Task<IActionResult> User(int id)
         {
             var emp = _context.Employees.FirstOrDefault(ee => ee.Id == id);
 
@@ -59,6 +62,21 @@ namespace RtfWebApp.Controllers
                 Id = id,
                 SkilGroups = CreateSkillGroups(id)
             };
+
+            var similarUsers = await _service.GetRecommendedEmployeesAsync(id);
+            result.SimilarUsers = similarUsers.Select(e =>
+            {
+                return new UserViewModel
+                {
+                    Age = 23 + _rnd.Next(40),
+                    Name = e.Name,
+                    Sex = "M",
+                    FeedBackQuality = _rnd.Next(100),
+                    AvatarId = Math.Abs(e.Name.GetHashCode()) % 9,
+                    Id = e.Id,
+                    SkilGroups = CreateSkillGroups(e.Id)
+                };
+            }).ToList();
 
             return View(result);
         }

@@ -2,7 +2,7 @@
   "profiles": {
     "RtfGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "-hr -sol"
+      "commandLineArgs": "-g -hr -sol"
     }
   }
 }

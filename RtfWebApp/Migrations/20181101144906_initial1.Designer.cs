@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RtfWebApp.Data;
 
 namespace RtfWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181101144906_initial1")]
+    partial class initial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,7 +300,7 @@ namespace RtfWebApp.Migrations
 
                     b.Property<int>("Rate");
 
-                    b.Property<int>("SkillId");
+                    b.Property<int>("SkilId");
 
                     b.Property<double>("Weight");
 
@@ -306,7 +308,7 @@ namespace RtfWebApp.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("SkillId");
+                    b.HasIndex("SkilId");
 
                     b.ToTable("Ratings");
                 });
@@ -469,7 +471,7 @@ namespace RtfWebApp.Migrations
 
                     b.HasOne("RtfWebApp.Models.Skill", "Skill")
                         .WithMany()
-                        .HasForeignKey("SkillId")
+                        .HasForeignKey("SkilId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

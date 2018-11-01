@@ -15,6 +15,12 @@ namespace RtfWebApp.Data
             Database.EnsureCreated();
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            
+        }
+
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Skil> Skills { get; set; }
@@ -23,6 +29,7 @@ namespace RtfWebApp.Data
         public DbSet<Achivment> Achivments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<ProfileSkils> ProfileSkils {get;set;}
-        public DbSet<UserAchivments> UserAchivments { get; set; }
+        public DbSet<EmployeeAchivments> UserAchivments { get; set; }
+        public DbSet<EmployeeSolutions>  EmployeeSolutions { get; set; }
     }
 }

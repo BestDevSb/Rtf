@@ -36,7 +36,8 @@ namespace RtfWebApp.Controllers.Api
                 .Where(x => x.SolutionId == solutionId)
                 .OrderByDescending(x => x.RateSum)
                 .ThenByDescending(x => x.WeightSum)
-                .Take(10);
+                .Take(10)
+                .ToList();
 
         }
     }

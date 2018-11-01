@@ -23,7 +23,7 @@ namespace RtfWebApp.Controllers
             return SolutionResolution.Unset;
         }
 
-        [HttpGet("api/[controller]/Vote/{solutionId}/{employeeId}/{vote}")]
+        [HttpGet("api/[controller]/FindEmployees/{solutionId}/{employeeId}/{vote}")]
         public IEnumerable<Employee> FindEmployees(int solutionId)
         {
             return new[] { new Employee { Id = -1, Name = "Test" }  };

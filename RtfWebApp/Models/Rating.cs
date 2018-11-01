@@ -20,5 +20,9 @@ namespace RtfWebApp.Models
         public double Weight { get; set; }
         [DataMember]
         public int Rate { get; set; }
+        [DataMember]
+        [ForeignKey(nameof(Skill))]
+        public int SkillId { get; set; }
+        public Skill Skill { get; set; }
     }
 }

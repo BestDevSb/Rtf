@@ -18,19 +18,19 @@ namespace RtfWebApp.Controllers
             _context = context;
         }
 
-        [HttpGet("{Id}")]
-        public TEntity Get(int Id)
+        [HttpGet("api/[controller]/{Id}")]
+        public virtual TEntity Get(int Id)
         {
             return _context.Set<TEntity>().FirstOrDefault(x => x.Id == Id);
         }
 
-        [HttpGet]
-        public IEnumerable<TEntity> Get()
+        [HttpGet("api/[controller]/")]
+        public virtual IEnumerable<TEntity> Get()
         {
             return _context.Set<TEntity>().ToList();
         }
 
-        [HttpPost]
+        [HttpPost("api/[controller]/")]
         public virtual TEntity Add(TEntity entity)
         {
             _context.Add(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
@@ -38,7 +38,7 @@ namespace RtfWebApp.Controllers
             return entity;
         }
 
-        [HttpPost("range")]
+        [HttpPost("api/[controller]/range")]
         public async Task<IEnumerable<TEntity>> AddRange(IEnumerable<TEntity> entities)
         {
             await _context.AddRangeAsync(entities);
@@ -47,8 +47,8 @@ namespace RtfWebApp.Controllers
             return entities;
         }
 
-        [HttpPut]
-        public TEntity Update(TEntity entity)
+        [HttpPut("api/[controller]/")]
+        public virtual TEntity Update(TEntity entity)
         {
             _context.Add(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             _context.SaveChanges();

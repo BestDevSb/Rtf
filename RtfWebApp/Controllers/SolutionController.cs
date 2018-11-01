@@ -28,5 +28,11 @@ namespace RtfWebApp.Controllers
         {
             return new[] { new Employee { Id = -1, Name = "Test" }  };
         }
+
+        [HttpGet("api/[controller]/getsolutionrecomendedemployees/{solutionId}")]
+        public IEnumerable<SolutionRecomendedEmployees> GetRecomendedEmployees(int solutionId)
+        {
+            return _context.SolutionRecomendedEmployees.Where(x => x.SolutionId == solutionId).OrderBy(x => x.RateSum);
+        }
     }
 }

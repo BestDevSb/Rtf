@@ -5,20 +5,21 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RtfWebApp.Models
 {
     [DataContract]
-    public class Rating: IHaveId
+    public class EmployeeSolutions
     {
         [DataMember]
         public int Id { get; set; }
         [DataMember]
-        [ForeignKey("Employee")]
+        [ForeignKey(nameof(Employee))]
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; }
         [DataMember]
-        public double Weight { get; set; }
-        [DataMember]
-        public int Rate { get; set; }
+        [ForeignKey(nameof(Solution))]
+        public int SolutionId { get; set; }
+        public Solution Solution { get; set; }
     }
 }

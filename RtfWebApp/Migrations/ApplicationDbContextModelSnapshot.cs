@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RtfWebApp.Data;
 
-namespace RtfWebApp.Data.Migrations
+namespace RtfWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181101083144_initial2")]
-    partial class initial2
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,7 +192,7 @@ namespace RtfWebApp.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("SkilId");
+                    b.Property<int>("SkilId");
 
                     b.HasKey("Id");
 
@@ -211,13 +209,51 @@ namespace RtfWebApp.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("ProfileId");
+                    b.Property<int>("ProfileId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProfileId");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("RtfWebApp.Models.EmployeeAchivments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AchivmentId");
+
+                    b.Property<int>("EmployeeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AchivmentId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("UserAchivments");
+                });
+
+            modelBuilder.Entity("RtfWebApp.Models.EmployeeSolutions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<int>("SolutionId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("SolutionId");
+
+                    b.ToTable("EmployeeSolutions");
                 });
 
             modelBuilder.Entity("RtfWebApp.Models.Profile", b =>
@@ -239,9 +275,9 @@ namespace RtfWebApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ProfileId");
+                    b.Property<int>("ProfileId");
 
-                    b.Property<int?>("SkilId");
+                    b.Property<int>("SkilId");
 
                     b.HasKey("Id");
 
@@ -258,7 +294,7 @@ namespace RtfWebApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EmployeeId");
+                    b.Property<int>("EmployeeId");
 
                     b.Property<int>("Rate");
 
@@ -281,15 +317,7 @@ namespace RtfWebApp.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("ProfileId");
-
-                    b.Property<int?>("SolutionId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
-
-                    b.HasIndex("SolutionId");
 
                     b.ToTable("Skills");
                 });
@@ -300,17 +328,21 @@ namespace RtfWebApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("SkilAId");
+                    b.Property<int>("SkilAId");
 
-                    b.Property<int?>("SkilBId");
+                    b.Property<int>("SkilBId");
+
+                    b.Property<int?>("SkilId");
+
+                    b.Property<int?>("SkilId1");
 
                     b.Property<double>("Weight");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SkilAId");
+                    b.HasIndex("SkilId");
 
-                    b.HasIndex("SkilBId");
+                    b.HasIndex("SkilId1");
 
                     b.ToTable("SkillDependencies");
                 });
@@ -326,25 +358,6 @@ namespace RtfWebApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Solutions");
-                });
-
-            modelBuilder.Entity("RtfWebApp.Models.UserAchivments", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AchivmentId");
-
-                    b.Property<int?>("EmployeeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AchivmentId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("UserAchivments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -396,65 +409,74 @@ namespace RtfWebApp.Data.Migrations
                 {
                     b.HasOne("RtfWebApp.Models.Skil", "Skil")
                         .WithMany()
-                        .HasForeignKey("SkilId");
+                        .HasForeignKey("SkilId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RtfWebApp.Models.Employee", b =>
                 {
                     b.HasOne("RtfWebApp.Models.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("ProfileId");
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RtfWebApp.Models.EmployeeAchivments", b =>
+                {
+                    b.HasOne("RtfWebApp.Models.Achivment", "Achivment")
+                        .WithMany()
+                        .HasForeignKey("AchivmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RtfWebApp.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RtfWebApp.Models.EmployeeSolutions", b =>
+                {
+                    b.HasOne("RtfWebApp.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RtfWebApp.Models.Solution", "Solution")
+                        .WithMany()
+                        .HasForeignKey("SolutionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RtfWebApp.Models.ProfileSkils", b =>
                 {
                     b.HasOne("RtfWebApp.Models.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("ProfileId");
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RtfWebApp.Models.Skil", "Skil")
                         .WithMany()
-                        .HasForeignKey("SkilId");
+                        .HasForeignKey("SkilId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RtfWebApp.Models.Rating", b =>
                 {
                     b.HasOne("RtfWebApp.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
-                });
-
-            modelBuilder.Entity("RtfWebApp.Models.Skil", b =>
-                {
-                    b.HasOne("RtfWebApp.Models.Profile")
-                        .WithMany("Skills")
-                        .HasForeignKey("ProfileId");
-
-                    b.HasOne("RtfWebApp.Models.Solution")
-                        .WithMany("RequieredSkils")
-                        .HasForeignKey("SolutionId");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RtfWebApp.Models.SkillDependency", b =>
                 {
-                    b.HasOne("RtfWebApp.Models.Skil", "SkilA")
-                        .WithMany()
-                        .HasForeignKey("SkilAId");
+                    b.HasOne("RtfWebApp.Models.Skil")
+                        .WithMany("Dependencies")
+                        .HasForeignKey("SkilId");
 
-                    b.HasOne("RtfWebApp.Models.Skil", "SkilB")
-                        .WithMany()
-                        .HasForeignKey("SkilBId");
-                });
-
-            modelBuilder.Entity("RtfWebApp.Models.UserAchivments", b =>
-                {
-                    b.HasOne("RtfWebApp.Models.Achivment", "Achivment")
-                        .WithMany()
-                        .HasForeignKey("AchivmentId");
-
-                    b.HasOne("RtfWebApp.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
+                    b.HasOne("RtfWebApp.Models.Skil")
+                        .WithMany("Dependendenties")
+                        .HasForeignKey("SkilId1");
                 });
 #pragma warning restore 612, 618
         }

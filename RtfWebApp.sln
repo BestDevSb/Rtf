@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RtfWebApp", "RtfWebApp\RtfWebApp.csproj", "{D382B823-194B-45EF-A229-E7697DE37760}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfGenerator", "RtfGenerator\RtfGenerator.csproj", "{35EB7C00-99ED-447D-9A53-99E77A50BE77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RtfGenerator", "RtfGenerator\RtfGenerator.csproj", "{35EB7C00-99ED-447D-9A53-99E77A50BE77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,8 @@ Global
 		{D382B823-194B-45EF-A229-E7697DE37760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D382B823-194B-45EF-A229-E7697DE37760}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D382B823-194B-45EF-A229-E7697DE37760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35EB7C00-99ED-447D-9A53-99E77A50BE77}.Ada|Any CPU.ActiveCfg = Release|Any CPU
+		{35EB7C00-99ED-447D-9A53-99E77A50BE77}.Ada|Any CPU.Build.0 = Release|Any CPU
 		{35EB7C00-99ED-447D-9A53-99E77A50BE77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35EB7C00-99ED-447D-9A53-99E77A50BE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35EB7C00-99ED-447D-9A53-99E77A50BE77}.Release|Any CPU.ActiveCfg = Release|Any CPU

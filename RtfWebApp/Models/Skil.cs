@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace RtfWebApp.Models
 {
     [DataContract]
-    public class Skil: IHaveId
+    public class Skill: IHaveId
     {
         [DataMember]
         public int Id { get; set; }

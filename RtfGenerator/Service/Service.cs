@@ -24,7 +24,7 @@ namespace RtfGenerator.Service
 
             await _client.ExecutePostTaskAsync(request);
         }
-        private async Task CreateSkillAsync(Skil skill)
+        private async Task CreateSkillAsync(Skill skill)
         {
             var request = new RestRequest("/api/skil", Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(skill);
@@ -48,7 +48,7 @@ namespace RtfGenerator.Service
                     presentSkills[category] = new HashSet<string>();
                 foreach(string skillName in skillsDict[category].Except(presentSkills[category]))
                 {
-                    await CreateSkillAsync(new Skil
+                    await CreateSkillAsync(new Skill
                     {
                         Name = skillName,
                         Category = category
@@ -69,11 +69,11 @@ namespace RtfGenerator.Service
             return await _client.GetAsync<List<Employee>>(request);
         }
 
-        public async Task<IEnumerable<Skil>> GetSkillsAsync()
+        public async Task<IEnumerable<Skill>> GetSkillsAsync()
         {
             var request = new RestRequest("/api/skil", Method.GET);
 
-            return await _client.GetAsync<List<Skil>>(request);
+            return await _client.GetAsync<List<Skill>>(request);
         }
 
         public async Task GenerateAsync()

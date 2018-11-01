@@ -18,13 +18,13 @@ namespace RtfWebApp.Controllers
             _context = context;
         }
 
-        [HttpGet("api/[controller]/{id}")]
+        [HttpGet("{Id}")]
         public TEntity Get(int Id)
         {
             return _context.Set<TEntity>().FirstOrDefault(x => x.Id == Id);
         }
 
-        [HttpGet("api/[controller]/")]
+        [HttpGet]
         public IEnumerable<TEntity> Get()
         {
             return _context.Set<TEntity>().ToList();
@@ -38,7 +38,7 @@ namespace RtfWebApp.Controllers
             return entity;
         }
 
-        [HttpPut("api/[controller]/")]
+        [HttpPut]
         public TEntity Update(TEntity entity)
         {
             _context.Add(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;

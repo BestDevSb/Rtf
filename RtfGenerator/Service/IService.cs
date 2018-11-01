@@ -8,6 +8,6 @@ namespace RtfGenerator.Service
     {
         Task GenerateAsync();
         Task<IEnumerable<Employee>> GetEmployeesAsync();
-        Task<IEnumerable<Skil>> GetSkillsAsync();
+        Task<IEnumerable<Skill>> GetSkillsAsync();
     }
 }

@@ -31,18 +31,20 @@ namespace RtfWebApp.Controllers
 
         public IActionResult Users()
         {
-            List<UserViewModel> result = _context.Employees.Select(u =>
-                new UserViewModel
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    AvatarId = Math.Abs(u.Name.GetHashCode()) % 9
-                }
-                ).ToList();
+            List<UserViewModel> result = _context.Employees.Select(ToUserViewModel).ToList();
 
             return View(result);
         }
 
+        public static UserViewModel ToUserViewModel(Employee model)
+        {
+            return new UserViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                AvatarId = Math.Abs(model.Name.GetHashCode()) % 9
+            };
+        }
         public IActionResult Projects()
         {
             return View();

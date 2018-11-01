@@ -1,0 +1,61 @@
+<<<<<<< HEAD
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+
+namespace RtfWebApp.Controllers
+{    
+=======
+﻿using System;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace RtfWebApp.Controllers
+{
+>>>>>>> a75934767a2506a03376ae5152c71cc3ce1148ab
+    using Data;
+    using RtfWebApp.Models;
+    using RtfWebApp.Services;
+
+    public class RateController:ApiBaseController<Rating>
+    {
+        private readonly ISettingsService _settingsService;
+
+        private const double DefaultWeight = 0.5;
+
+        public RateController(ApplicationDbContext context, ISettingsService settingsService):base(context)
+        {
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+        }
+
+        /// <summary>
+        /// Базовый метод для заполнения навыков HR'ом
+        /// Значение веса оценки заполняется значение поумолчанию
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost("api/[controller]/")]
+        public override Rating Add([FromBody]Rating entity)
+        {
+            entity.Weight = _settingsService.HRDefaultRate;
+            return base.Add(entity);
+        }
+
+        /// <summary>
+        /// Рассчет веса оценки на основе данных пользоавтеля
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost("api/[controller]/Rate/{employeeId}")]
+        public Rating Rate([FromBody]Rating entity, int employeeId)
+        {
+            entity.Weight = _context.EmployeeRating.FirstOrDefault(er => er.EmployeeId == employeeId && er.SkillId == entity.SkillId)?.Weight ?? 0.1;
+            return base.Add(entity);
+        }
+
+        private double CalcRate(Rating entity, int employeeId)
+        {
+            //TODO: calc weight by user skils and reliability
+            return DefaultWeight;
+        }
+    }
+}

@@ -17,8 +17,8 @@ namespace RtfWebApp.Data
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<SkillDependency>().HasOne(x => x.SkilA).WithMany(x => x.Dependencies).HasForeignKey(x => x.SkilAId).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<SkillDependency>().HasOne(x => x.SkilB).WithMany(x => x.Dependendenties).HasForeignKey(x => x.SkilBId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SkillDependency>().HasOne(x => x.SkillA).WithMany(x => x.Dependencies).HasForeignKey(x => x.SkillAId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SkillDependency>().HasOne(x => x.SkillB).WithMany(x => x.Dependendenties).HasForeignKey(x => x.SkillBId).OnDelete(DeleteBehavior.Restrict);
             builder.Query<EmployeeRating>().ToView("V_EMPLOYEESRATES");
             base.OnModelCreating(builder);
             
@@ -27,7 +27,7 @@ namespace RtfWebApp.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<Solution> Solutions { get; set; }
+        public DbSet<SolutionSkils> SolutionsSkills { get; set; }
         public DbSet<SkillDependency> SkillDependencies { get; set; }
         public DbSet<Achivment> Achivments { get; set; }
         public DbSet<Rating> Ratings { get; set; }

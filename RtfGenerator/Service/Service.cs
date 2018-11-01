@@ -133,7 +133,7 @@ namespace RtfGenerator.Service
                     newProfileSkills.Add(new ProfileSkills
                     {
                         ProfileId = profile.Id,
-                        SkilId = skillId
+                        SkillId = skillId
                     });
                 }
 

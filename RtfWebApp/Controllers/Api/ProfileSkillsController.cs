@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using RtfWebApp.Data;
 using RtfWebApp.Models;
 
-namespace RtfWebApp.Controllers
+namespace RtfWebApp.Controllers.Api
 {
     [ApiController]
     public class ProfileSkillsController : ApiBaseController<ProfileSkills>

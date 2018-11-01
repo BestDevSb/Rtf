@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RtfWebApp.Controllers
+namespace RtfWebApp.Controllers.Api
 {    
     using Data;
     using RtfWebApp.Models;

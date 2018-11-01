@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RtfWebApp.Controllers
+namespace RtfWebApp.Controllers.Api
 {
     using Data;
     using Models;

@@ -1,38 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RtfWebApp.Data;
+using RtfWebApp.Models;
+using RtfWebApp.Models.View;
 
 namespace RtfWebApp.Controllers
 {
-    using Models;
-    using Data;
-    using RtfWebApp.Models;
-    using RtfWebApp.Controllers.Models.Api;
-
-    public class SolutionController : ApiBaseController<Solution>
+    public class SolutionController : Controller
     {
-        public SolutionController(ApplicationDbContext context) : base(context)
+        private ApplicationDbContext _context = null;
+
+        public SolutionController(ApplicationDbContext context)
         {
+            _context = context;
         }
 
-        [HttpGet("api/[controller]/Vote/{solutionId}/{employeeId}/{vote}")]
-        public SolutionResolution Vote(int solutionId, int employeeId, Vote vote)
-        {
-            return SolutionResolution.Unset;
-        }
+        private static Random _rnd = new Random();
 
-        [HttpGet("api/[controller]/FindEmployees/{solutionId}/{employeeId}/{vote}")]
-        public IEnumerable<Employee> FindEmployees(int solutionId)
+        public IActionResult Index()
         {
-            return new[] { new Employee { Id = -1, Name = "Test" }  };
-        }
+            List<UserViewModel> result = _context.Employees.Select(u =>
+                new UserViewModel
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    AvatarId = Math.Abs(u.Name.GetHashCode()) % 9
+                }
+                ).ToList();
 
-        [HttpGet("api/[controller]/getsolutionrecomendedemployees/{solutionId}")]
-        public IEnumerable<SolutionRecomendedEmployees> GetRecomendedEmployees(int solutionId)
+            return View(result);
+        }
+        
+        public IActionResult Item(int id)
         {
-            return _context.SolutionRecomendedEmployees.Where(x => x.SolutionId == solutionId).OrderBy(x => x.RateSum);
+            var emp = _context.Employees.FirstOrDefault(ee => ee.Id == id);
+
+            UserViewModel result = new UserViewModel
+            {
+                Age = 23 + _rnd.Next(40),
+                Name = emp.Name,
+                Sex = "M",
+                FeedBackQuality = _rnd.Next(100),
+                AvatarId = id % 9,
+                Id = id,
+                SkilGroups = CreateSkillGroups(id)
+            };
+
+            return View(result);
         }
     }
 }

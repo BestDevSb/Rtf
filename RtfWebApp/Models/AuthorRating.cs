@@ -33,7 +33,7 @@ namespace RtfWebApp.Models
         [ForeignKey(nameof(Skill))]
         public int SkillId { get; set; }
 
-        public Skil Skill { get; set; }
+        public Skill Skill { get; set; }
         public Employee Employee { get; set; }
     }
 }

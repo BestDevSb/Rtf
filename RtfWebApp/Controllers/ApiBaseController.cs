@@ -31,7 +31,7 @@ namespace RtfWebApp.Controllers
         }
 
         [HttpPost("api/[controller]/")]
-        public TEntity Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             _context.Add(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             _context.SaveChanges();

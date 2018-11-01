@@ -33,9 +33,22 @@ namespace RtfWebApp.Controllers
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
+        [HttpGet("api/[controller]/calcrating/")]
         public int CalcRating(int employeeId, DateTime from, DateTime to)
         {
             return 0;
+        }
+
+        [HttpGet("api/[controller]/getrating/{employeeId}")]
+        public IEnumerable<EmployeeRating> GetRating(int employeeId)
+        {
+            return _context.EmployeeRating.Where(employee => employee.EmployeeId == employeeId);
+        }
+
+        [HttpGet("api/[controller]/getrating")]
+        public IEnumerable<EmployeeRating> GetRating()
+        {
+            return _context.EmployeeRating.ToList();
         }
     }
 }

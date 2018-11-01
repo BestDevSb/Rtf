@@ -25,7 +25,7 @@ namespace RtfWebApp.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("api/[controller]/")]
-        public override Rating Add(Rating entity)
+        public override Rating Add([FromBody]Rating entity)
         {
             entity.Weight = DefaultWeight;
             return base.Add(entity);
@@ -37,13 +37,13 @@ namespace RtfWebApp.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("api/[controller]/Rate/{employeeId}")]
-        public Rating Rate(Rating entity, int employeeId)
+        public Rating Rate([FromBody]Rating entity, int employeeId)
         {
             entity.Weight = CalcRate(entity, employeeId);
             return base.Add(entity);
         }
 
-        private double CalcRate(Rating entity, int employeeId)
+        private double CalcRate([FromBody]Rating entity, int employeeId)
         {
             //TODO: calc weight by user skils and reliability
             return DefaultWeight;

@@ -15,6 +15,8 @@ namespace RtfGenerator
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => true;
 
             MainAsync(args).GetAwaiter().GetResult();
+
+            Console.WriteLine("Thank you");
         }
 
 

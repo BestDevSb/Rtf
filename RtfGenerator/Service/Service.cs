@@ -11,7 +11,7 @@ namespace RtfGenerator.Service
 {
     internal class Service : IService
     {
-        private const string _csEmployeeApi = "/api/employees";
+        private const string _csEmployeeApi = "/api/employees/";
         private const string _csSkillApi = "/api/skil";
         private const string _csProfileApi = "/api/profile";
         private const string _csProfileSkillsApi = "/api/profileskills";
@@ -41,7 +41,7 @@ namespace RtfGenerator.Service
             return await _client.ExecuteGetTaskAsync(request);
         }
 
-        private Task CreateEmployeeAsync(Employee employee) => ExecutePost(_csEmployeeApi, employee);
+        private Task CreateEmployeesAsync(IEnumerable<Employee> employees) => ExecutePost($"{_csEmployeeApi}/range", employees);
         private async Task<List<Employee>> GetEmployeesAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csEmployeeApi);
@@ -49,7 +49,7 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Employee[]>(response.Content).ToList();
         }
 
-        private Task CreateProfileAsync(Profile profile) => ExecutePost(_csProfileApi, profile);
+        private Task CreateProfilesAsync(IEnumerable<Profile> profiles) => ExecutePost($"{_csProfileApi}/range", profiles);
         private async Task<List<Profile>> GetProfilesAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csProfileApi);
@@ -57,7 +57,7 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Profile[]>(response.Content).ToList();
         }
 
-        private Task CreateSkillAsync(Skill skill) => ExecutePost(_csSkillApi, skill);
+        private Task CreateSkillsAsync(IEnumerable<Skill> skills) => ExecutePost($"{_csSkillApi}/range", skills);
         private async Task<List<Skill>> GetSkillsAsync()
         {
             IRestResponse response = await ExecuteGetListAsync(_csSkillApi);
@@ -65,7 +65,7 @@ namespace RtfGenerator.Service
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Skill[]>(response.Content).ToList();
         }
 
-        private Task CreateProfileSkill(ProfileSkills profileSkill) => ExecutePost(_csProfileSkillsApi, profileSkill);
+        private Task CreateProfileSkillsAsync(IEnumerable<ProfileSkills> profileSkills) => ExecutePost($"{_csProfileSkillsApi}/range", profileSkills);
 
         private async Task GenerateSkillsAsync()
         {
@@ -77,19 +77,23 @@ namespace RtfGenerator.Service
                 [SkillCategory.Soft] = new HashSet<string> { "Эмоциональный интеллект", "Самооценка", "Адаптивность", "Конфликтология", "Клиентоцентричность" }
             };
 
+            List<Skill> newSkills = new List<Skill>();
+
             foreach(SkillCategory category in skillsDict.Keys)
             {
                 if (!presentSkills.ContainsKey(category))
                     presentSkills[category] = new HashSet<string>();
                 foreach(string skillName in skillsDict[category].Except(presentSkills[category]))
                 {
-                    await CreateSkillAsync(new Skill
+                    newSkills.Add(new Skill
                     {
                         Name = skillName,
                         Category = category
                     });
                 }
             }
+
+            await CreateSkillsAsync(newSkills);
         }
 
         private async Task GenerateProfilesAsync()
@@ -98,22 +102,19 @@ namespace RtfGenerator.Service
             var profiles = Enumerable.Range(0, 30).Select(i => $"Профиль {i}").ToHashSet();
 
             var workItems = profiles.Except(presentedProfiles);
-            if (workItems?.Any() ?? false)
-            {
-                foreach (var profileName in workItems)
-                {
-                    await CreateProfileAsync(new Profile
-                    {
-                        Name = profileName
-                    });
-                }
-            }
+            if (!(workItems?.Any() ?? false))
+                return;
+
+            var newProfiles = workItems.Select(n => new Profile { Name = n }).ToList();
+            await CreateProfilesAsync(newProfiles);
 
             var skills = (await GetSkillsAsync()).ToList();
 
             IGenerator<Skill> skillGenerator = new Generator<Skill>(_generator);
             IGenerator<Profile> profileGenerator = new Generator<Profile>(_generator);
             HashSet<int> profileSkills = new HashSet<int>();
+
+            var newProfileSkills = new List<ProfileSkills>();
 
             foreach (Profile profile in await GetProfilesAsync())
             {
@@ -128,7 +129,8 @@ namespace RtfGenerator.Service
 
                     profileSkills.Add(skillId);
 
-                    await CreateProfileSkill(new ProfileSkills
+
+                    newProfileSkills.Add(new ProfileSkills
                     {
                         ProfileId = profile.Id,
                         SkilId = skillId
@@ -137,11 +139,31 @@ namespace RtfGenerator.Service
 
                 profileSkills.Clear();
             }
+
+            await CreateProfileSkillsAsync(newProfileSkills);
         }
 
         private async Task GenerateEmployeesAsync()
         {
-            await Task.Delay(0);
+            var existenceEmployees = (await GetEmployeesAsync()).Select(i => i.Name).ToHashSet();
+            var employees = Enumerable.Range(0, 100).Select(i => $"Сотрудник {i + 1}").ToHashSet();
+
+            var workItems = employees.Except(existenceEmployees);
+
+            if (!(workItems?.Any() ?? false))
+                return;
+
+            var profiles = await GetProfilesAsync();
+            IGenerator<Profile> profileGenerator = new Generator<Profile>(_generator);
+
+            await CreateEmployeesAsync(workItems.Select(name =>
+            {
+                return new Employee
+                {
+                    Name = name,
+                    ProfileId = profiles[_generator.GetNext(0, profiles.Count)].Id
+                };
+            }));
         }
 
         public async Task GenerateAsync()

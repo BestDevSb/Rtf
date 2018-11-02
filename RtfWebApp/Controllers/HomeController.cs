@@ -59,7 +59,7 @@ namespace RtfWebApp.Controllers
                 Age = 23 + _rnd.Next(40),
                 Name = emp.Name,
                 Sex = "M",
-                FeedBackQuality = _rnd.Next(100),
+                FeedBackQuality = await _service.GetObjectivity(emp.Id),
                 AvatarId = Math.Abs(emp.Name.GetHashCode()) % 9,
                 Id = id,
                 SkilGroups = CreateSkillGroups(id),
@@ -74,7 +74,6 @@ namespace RtfWebApp.Controllers
                     Age = 23 + _rnd.Next(40),
                     Name = e.Name,
                     Sex = "M",
-                    FeedBackQuality = _rnd.Next(100),
                     AvatarId = Math.Abs(e.Name.GetHashCode()) % 9,
                     Id = e.Id
                 };

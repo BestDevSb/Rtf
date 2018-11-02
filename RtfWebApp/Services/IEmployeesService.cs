@@ -9,5 +9,6 @@ namespace RtfWebApp.Services
     public interface IEmployeesService
     {
         Task<IEnumerable<RecomendedEmployees>> GetRecommendedEmployeesAsync(int employeeId);
+        Task<double> GetObjectivity(int employeeId);
     }
 }

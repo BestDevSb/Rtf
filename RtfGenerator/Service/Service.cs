@@ -19,6 +19,7 @@ namespace RtfGenerator.Service
         private const string _csSolutionsApi = "/api/solutions";
         private const string _csSolutionsSkillsApi = "/api/solutionsskills";
         private const string _csRateEmployee = "/api/rate/rate/{0}";
+        private const string _csAuthorRateEmployee = "/api/authorrating";
 
         private static Func<string, string> _cleanApi = api => $"{api}/clean";
         private static Func<string, string> _rangeApi = api => $"{api}/range";
@@ -210,7 +211,8 @@ namespace RtfGenerator.Service
 
         public async Task GenerateHRRatingsAsync()
         {
-            await ExecuteDeleteAsync($"{_csRateApi}/clean");
+            await ExecuteDeleteAsync($"{_cleanApi(_csRateApi)}");
+            await ExecuteDeleteAsync($"{_cleanApi(_csAuthorRateEmployee)}");
 
             var employeesTask = GetEmployeesAsync();
             var profilesTask = GetProfilesAsync();
@@ -303,6 +305,8 @@ namespace RtfGenerator.Service
                 return result;
             };
 
+            var authorRatings = new List<AuthorRating>();
+
             for(int day = 6; day >= 0; day--)
             {
                 foreach (Employee employee in employees)
@@ -318,18 +322,32 @@ namespace RtfGenerator.Service
 
                     for (int skillIndex = 0; skillIndex < _generator.GetNext(0, skills.Count); skillIndex++)
                     {
+                        DateTimeOffset date = DateTimeOffset.Now.AddDays(-day);
+                        var skill = skillGenerator.GetNext(skills);
+                        int rate = _generator.GetNext(1, 10);
+
                         await ExecutePostAsync<Rating>(string.Format(_csRateEmployee, who.Id), new Rating
                         {
                             Rate = _generator.GetNext(1, 10),
-                            SkillId = skillGenerator.GetNext(skills).Id,
+                            SkillId = skill.Id,
                             EmployeeId = whom.Id,
-                            Date = DateTimeOffset.Now.AddDays(-day)
+                            Date = date
+                        });
+
+                        authorRatings.Add(new AuthorRating
+                        {
+                            EmployeeId = who.Id,
+                            SkillId = skill.Id,
+                            Rate = rate,
+                            Date = date
                         });
                     }
                 }
 
                 procesedEmployees.Clear();
             }
+
+            await ExecutePostAsync(_rangeApi(_csAuthorRateEmployee), authorRatings);
         }
     }
 }

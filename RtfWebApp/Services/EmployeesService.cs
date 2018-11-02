@@ -27,5 +27,10 @@ namespace RtfWebApp.Services
                                     .Take(10)
                                     .ToListAsync();
         }
+
+        public async Task<double> GetObjectivity(int employeeId)
+        {
+            return Convert.ToDouble((await _dbContext.Objectivities.FirstOrDefaultAsync(i => i.EmployeeId == employeeId))?.Objectivity ?? 1M);
+        }
     }
 }

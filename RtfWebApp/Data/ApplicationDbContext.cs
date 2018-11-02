@@ -23,6 +23,7 @@ namespace RtfWebApp.Data
             builder.Query<EmployeeRating>().ToView("V_EMPLOYEESRATES");
             builder.Query<SolutionRecomendedEmployees>().ToView("V_SOLUTION_EMPLOYEE");
             builder.Query<RecomendedEmployees>().ToView("V_EMPLOYEE_PROFILE_INTERSECT");
+            builder.Query<EmployeeObjectivity>().ToView("V_EMPLOYEE_OBJECTIVITY");
             base.OnModelCreating(builder);
             
         }
@@ -43,5 +44,6 @@ namespace RtfWebApp.Data
         public DbQuery<EmployeeRating> EmployeeRating { get; set; }
         public DbQuery<SolutionRecomendedEmployees> SolutionRecomendedEmployees { get; set; }
         public DbQuery<RecomendedEmployees> RecomendedEmployees { get; set; }
+        public DbQuery<EmployeeObjectivity> Objectivities { get; set; }
     }
 }
